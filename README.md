@@ -18,6 +18,7 @@ To start the full environment:
 
 ```console
 $ docker-compose up
+```
 
 ---
 
