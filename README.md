@@ -8,6 +8,19 @@ REST API built with NestJS 8.4.1 and TypeScript 4.7.4 for the [confectionary-sto
 
 * Swagger UI at: `localhost:3000/api`.
 
+---
+
+## Easiest Way to Run: Docker Deployment
+
+The recommended and simplest way to run this application, including the API, client, and the necessary PostgreSQL database, is using docker compose.
+
+To start the full environment:
+
+```console
+$ docker-compose up
+
+---
+
 #### Built With
 
 * Tested on node 17.3.0 and npm 8.4.1
@@ -16,9 +29,21 @@ REST API built with NestJS 8.4.1 and TypeScript 4.7.4 for the [confectionary-sto
 * [TypeORM](https://github.com/typeorm/typeorm) 0.3.7
 * [PostgreSQL](https://github.com/postgres/postgres) v14.0
 
-#### Quick Start
+---
 
+### ⚠️ Node.js Compatibility Note
 
+This project was developed and tested primarily on **Node.js v17.3.0**.
+
+For **Node.js versions 17 and higher (v18, v20, etc.)**, you may encounter build errors (`ERR_OSSL_EVP_UNSUPPORTED`) due to the adoption of OpenSSL 3.0, which deprecates older cryptographic algorithms used by some dependencies (like Webpack).
+
+To resolve this locally, you must run build commands with the following compatibility flag:
+
+```bash
+# Set this environment variable when running 'npm run build' locally
+export NODE_OPTIONS=--openssl-legacy-provider
+
+#### Quick Start for local deployment
 
 ```console
 $ npm install
@@ -42,7 +67,7 @@ $ npm run test:e2e
 
 #### Quickstart for deployment with frontend
 
-To deploy this application, install the packages first for the api with `npm run install` and then for the client, `npm --prefix ./client run install` which install packages for the client, pointing to the `client/` directory (client is assumed to be in the directory). To build the api and the client you follow similar steps with `npm run build` to build the api and `npm --prefix ./client run build` to build the client. Run `npm run start:prod` to run the application in production, this serves the client from `client/dist/` and runs the api from `dist/`. Directory includes `.env` file template with predefined values that you can change on your own.
+To deploy this application, install the packages first for the api with `npm install` and then for the client, `npm --prefix ./client run install` which install packages for the client, pointing to the `client/` directory (client is assumed to be in the directory). To build the api and the client you follow similar steps with `npm run build` to build the api and `npm --prefix ./client run build` to build the client. Run `npm run start:prod` to run the application in production, this serves the client from `client/dist/` and runs the api from `dist/`. Directory includes `.env` file template with predefined values that you can change on your own.
 
 Note for windows users: you might have to use `npm run --prefix <directory> --cwd <your path> <command>`
 
@@ -60,6 +85,8 @@ It is directory for the client, you're meant to place the client there
 
 ### Docker deployment
 
+The Docker build is configured for Node.js 18 and includes the necessary compatibility flag to ensure client can be built without running into the OpenSSL error.
+
 To run the docker deployment:
 ```console
 $ docker-compose up
@@ -70,13 +97,13 @@ To clean up the docker deployment:
 $ sh res/clean.sh
 ```
 
-The application can be deployed in docker by using `$ docker-compose up` and desired flags. Dockerfile builds on a NodeJS version 16.14.0 and alpine, it builds both the api and the client and runs the application on production as a start point. Application serving port is set to be 3000 by default. The docker-compose.yml also pulls and sets up an image of postgres 14.1 that runs on port 5432 as is by default in postgres. Database is initialized with the `init.sql` file from `res/` directory. Be sure to modify the docker-compose.yml to your liking, by default it expects you to have an ready built image of the application.
+The application can be deployed in docker by using `$ docker-compose up` and desired flags. Dockerfile builds on a NodeJS version 18.x and alpine, it builds both the api and the client and runs the application on production as a start point. Application serving port is set to be 3000 by default. The docker-compose.yml also pulls and sets up an image of postgres 14.1 that runs on port 5432 as is by default in postgres. Database is initialized with the `init.sql` file from `res/` directory. Be sure to modify the docker-compose.yml to your liking, by default it expects you to have an ready built image of the application.
 
 `res/` directory also has shell scripts for deploying and cleaning up the docker deployment, use this with precaution. `startup.sh` runs `docker-compose up -d` and runs a couple of  tests for the containers.
 
 ### Note on table mapping with models and data.sql
 
-In the res/ directory, data.sql contains both insertation.sql and schema.sql contents. This file can be used for deploying the application. Although TypeORM can generate tables at runtime, I've opted to utilize an existing schema definitions.  
+In the res/ directory, data.sql contains both insertation.sql and schema.sql contents. This file can be used for deploying the application. Although TypeORM can generate tables at runtime, I've opted to utilize an existing schema definitions.
 
 [migrations in TypeORM](https://typeorm.io/migrations)
 
@@ -104,7 +131,15 @@ ALTER TABLE public.users OWNER to <another_user>;
 
 #### Prerequisites
 
-PostgreSQL +13.0 (or Docker)    
-TypeScript +4.7.4   
-Node +v12.2.20  
-npm +7.5.5  
+This project can be run in two ways.
+
+**1. For Docker Deployment (Recommended)**
+* docker (v20.10 or higher)
+* docker-compose (v1.29 or higher)
+
+**2. For Local Development (Manual Setup)**
+* Node.js: Must be compatible with the versions tested (v17.3.0) or higher, requiring the OpenSSL legacy flag.
+    **Recommended:** Use Node Version Manager (nvm) and the provided `.nvmrc` file for version management.
+* npm: Version 8.4.1 or higher
+* PostgreSQL: Version 13.0 or higher, running locally, unless disabled when using Docker.
+* TypeScript: Version 4.7.4 or higher.
