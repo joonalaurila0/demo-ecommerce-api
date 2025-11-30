@@ -14,11 +14,50 @@ REST API built with NestJS 8.4.1 and TypeScript 4.7.4 for the [confectionary-sto
 
 The recommended and simplest way to run this application, including the API, client, and the necessary PostgreSQL database, is using docker compose.
 
-To start the full environment:
+You must manually build the images *before* running `docker-compose up`.
+
+### Prerequisites
+
+1.  **Pull Base Images:** Ensure you have the necessary base images (Node, Postgres) downloaded:
+    ```console
+    $ docker pull node:18-alpine
+    $ docker pull postgres:14.1-alpine # Adjust based on your postgres image version
+    ```
+2.  **Build the Image(s):** Build the appropriate image target (`dev` or `prod`).
+    * **For Development (API Only):**
+        ```console
+        $ docker build -t ecommerce-demo --target dev .
+        ```
+    * **For Production (Full Monolith):**
+        ```console
+        # Make sure the client directory is cloned first!
+        $ docker build -t ecommerce-demo --target prod .
+        ```
+
+### Start the Environment
+
+After successfully building the images, you can start the full environment:
 
 ```console
-$ docker-compose up
-```
+$ docker-compose up -d
+## 🐳 Docker Build Targets & Client Dependency (IMPORTANT)
+
+This repository uses a **multi-stage Dockerfile** (`Dockerfile`) with two distinct build targets to manage the server (API) and the client (React) application:
+
+| Target | Command | Purpose | Client Code Required? |
+| :--- | :--- | :--- | :--- |
+| **`dev`** | `docker build --target dev .` | **API-Only Build.** Ideal for development and debugging. | **NO.** Skips client build entirely. |
+| **`prod`** | `docker build --target prod .` | **Full Monolith Build.** Includes compiled API and client files. | **YES.** Requires a local client directory. |
+
+### ⚠️ Client Dependency Warning
+
+The `prod` build target requires the React client source code to be present in a local directory named `./client/`.
+
+If you are using this repository for production deployment, you must first clone the client repository (or ensure it is available as a submodule/local directory) at the path `./client/` relative to the root of this repository:
+
+```bash
+# Clone the client repository into the expected 'client' directory
+git clone [https://github.com/joonalaurila0/demo-ecommerce.git](https://github.com/joonalaurila0/demo-ecommerce.git) client
 
 ---
 
