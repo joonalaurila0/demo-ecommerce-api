@@ -59,7 +59,8 @@ If you are using this repository for production deployment, you must first clone
 
 ```bash
 # Clone the client repository into the expected 'client' directory
-git clone [https://github.com/joonalaurila0/demo-ecommerce.git](https://github.com/joonalaurila0/demo-ecommerce.git) client
+git clone https://github.com/joonalaurila0/demo-ecommerce.git client
+```
 
 ---
 
