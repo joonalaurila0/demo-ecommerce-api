@@ -40,6 +40,8 @@ After successfully building the images, you can start the full environment:
 
 ```console
 $ docker-compose up -d
+```
+
 ## 🐳 Docker Build Targets & Client Dependency (IMPORTANT)
 
 This repository uses a **multi-stage Dockerfile** (`Dockerfile`) with two distinct build targets to manage the server (API) and the client (React) application:
